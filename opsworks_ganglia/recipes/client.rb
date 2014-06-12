@@ -40,7 +40,7 @@ if node[:opsworks][:layers].has_key?('monitoring-master')
   execute 'stop gmond with non-updated configuration' do
     command value_for_platform_family(
       "rhel" => '/etc/init.d/gmond stop',
-      "debian" => '/etc/init.d/ganglia-monitor stop'
+      "debian" => node[:platform_version] == '14.04' ? '/sbin/initctl status ganglia-monitor | grep stop || /sbin/initctl stop ganglia-monitor' : '/etc/init.d/ganglia-monitor stop'
     )
   end
 
